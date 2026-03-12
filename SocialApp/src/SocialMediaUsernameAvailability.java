@@ -3,49 +3,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UseCase2GamingUsernameSelection
- * Demonstrates username availability checking for a gaming platform.
+ * UseCase3EmailAvailabilityChecker
+ * Demonstrates email availability checking using HashMap.
  */
 
-class GamingUsernameService {
+class EmailService {
 
-    // username -> playerId
-    private HashMap<String, Integer> players = new HashMap<>();
+    // email -> userId
+    private HashMap<String, Integer> emails = new HashMap<>();
 
-    // username -> attempt count
+    // email -> attempt count
     private HashMap<String, Integer> attempts = new HashMap<>();
 
-    // Check if username is available
-    public boolean checkAvailability(String username) {
-        attempts.put(username, attempts.getOrDefault(username, 0) + 1);
-        return !players.containsKey(username);
+    // Check email availability
+    public boolean checkAvailability(String email) {
+        attempts.put(email, attempts.getOrDefault(email, 0) + 1);
+        return !emails.containsKey(email);
     }
 
-    // Register a new player
-    public void registerPlayer(String username, int playerId) {
-        players.put(username, playerId);
+    // Register email
+    public void registerEmail(String email, int userId) {
+        emails.put(email, userId);
     }
 
-    // Suggest gamer-style alternatives
-    public List<String> suggestAlternatives(String username) {
+    // Suggest alternative email addresses
+    public List<String> suggestAlternatives(String email) {
 
         List<String> suggestions = new ArrayList<>();
 
-        suggestions.add(username + "99");
-        suggestions.add(username + "_pro");
-        suggestions.add("x" + username + "x");
-        suggestions.add(username + "_gamer");
+        String name = email.split("@")[0];
+        String domain = email.split("@")[1];
+
+        suggestions.add(name + "1@" + domain);
+        suggestions.add(name + "123@" + domain);
+        suggestions.add(name + ".official@" + domain);
+        suggestions.add(name + "_mail@" + domain);
 
         return suggestions;
     }
 
-    // Get most attempted username
+    // Get most attempted email
     public String getMostAttempted() {
 
         String most = "";
         int max = 0;
 
         for (String key : attempts.keySet()) {
+
             int count = attempts.get(key);
 
             if (count > max) {
@@ -62,35 +66,35 @@ public class SocialMediaUsernameAvailability {
 
     public static void main(String[] args) {
 
-        GamingUsernameService service = new GamingUsernameService();
+        EmailService service = new EmailService();
 
-        // Existing players
-        service.registerPlayer("DragonSlayer", 201);
-        service.registerPlayer("ShadowNinja", 202);
+        // Existing emails
+        service.registerEmail("john@gmail.com", 301);
+        service.registerEmail("admin@gmail.com", 302);
 
-        System.out.println("===== Gaming Platform Username Selection =====");
+        System.out.println("===== Email Address Availability Checker =====");
 
-        String username = "DragonSlayer";
+        String email = "john@gmail.com";
 
-        boolean available = service.checkAvailability(username);
+        boolean available = service.checkAvailability(email);
 
-        System.out.println("checkAvailability(\"" + username + "\") → " + available);
+        System.out.println("checkAvailability(\"" + email + "\") → " + available);
 
         if (!available) {
-            System.out.println("Suggested gamer tags: " + service.suggestAlternatives(username));
+            System.out.println("Suggested alternatives: " + service.suggestAlternatives(email));
         }
 
-        String newUser = "KnightRider";
+        String newEmail = "jane@gmail.com";
 
-        boolean newAvailable = service.checkAvailability(newUser);
+        boolean newAvailable = service.checkAvailability(newEmail);
 
-        System.out.println("checkAvailability(\"" + newUser + "\") → " + newAvailable);
+        System.out.println("checkAvailability(\"" + newEmail + "\") → " + newAvailable);
 
         if (newAvailable) {
-            service.registerPlayer(newUser, 203);
-            System.out.println(newUser + " successfully registered.");
+            service.registerEmail(newEmail, 303);
+            System.out.println(newEmail + " successfully registered.");
         }
 
-        System.out.println("Most attempted username → " + service.getMostAttempted());
+        System.out.println("Most attempted email → " + service.getMostAttempted());
     }
 }
